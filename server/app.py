@@ -41,8 +41,7 @@ def register():
     name = request.form.get('name')
     email = request.form.get('email')
     password = request.form.get('password')
-    role = request.args.get('role')
-    print(role)
+    role = request.form.get('role')
     hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
     if role == 'student':
         user = Student(name=name, email=email, password=hashed_password)
@@ -57,9 +56,9 @@ def register():
 def login():
     if current_user.is_authenticated:
         return ""
-    email = request.args.get('email')
-    password = request.args.get('password')
-    role = request.args.get('role')
+    email = request.form.get('email')
+    password = request.form.get('password')
+    role = request.form.get('role')
     if role == 'student':
         sql = f"SELECT password FROM student WHERE email = {email}"
     else:
