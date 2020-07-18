@@ -3,6 +3,7 @@ from flask import request, jsonify, render_template
 from flask_bcrypt import Bcrypt, check_password_hash
 from flask_login import current_user, logout_user, UserMixin
 from flask_sqlalchemy import SQLAlchemy
+import os
 
 
 db = SQLAlchemy()
@@ -24,7 +25,7 @@ class Student(db.Model, UserMixin):
 
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://rrelepnixlppyi:80ab34ef14e38574ff6bcfc2d4e55d6a2f06c72933ffd95e9509dec552d698da@ec2-3-216-129-140.compute-1.amazonaws.com:5432/d75dva3dnbli8b'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('POSTGRES_KEY')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
 
