@@ -41,7 +41,7 @@ def register():
     name = request.form.get('name')
     email = request.form.get('email')
     password = request.form.get('password')
-    print(name)
+    print(f"Name: {request.form.get('name')}")
     print(password)
     role = request.args.get('role')
     hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
