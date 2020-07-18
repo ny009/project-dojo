@@ -1,5 +1,5 @@
 from flask import Flask
-from flask import request, jsonify
+from flask import request, jsonify, render_template
 from flask_bcrypt import Bcrypt, check_password_hash
 from flask_login import current_user, logout_user, UserMixin
 from flask_sqlalchemy import SQLAlchemy
@@ -33,7 +33,7 @@ bcrypt = Bcrypt(app)
 
 @app.route('/')
 def hello_world():
-    return 'Hello, World!'
+    return render_template('index.html')
 
 
 @app.route("/api/v1/register", methods=['POST'])
@@ -64,14 +64,14 @@ def login():
         user = Mentor.query.filter_by(email=email).first()
 
     if user is not None and check_password_hash(user.password, password):
-        return jsonify({'signed_in': True})
-    return jsonify({'signed_in': False})
+        return jsonify({'value': "Success"})
+    return jsonify({'value': "Fail"})
 
 
 @app.route("/api/v1/logout")
 def logout():
     logout_user()
-    return jsonify({'logged_out': True})
+    return jsonify({'value': "Success"})
 
 
 if __name__ == "__main__":

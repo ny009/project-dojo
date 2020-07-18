@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Dojo - API</title>
+</head>
+<body>
+    <h1>Project Dojo API - version 1</h1>
+    <div>
+        <span># POST https://project-dojo.herokuapp.com/api/v1/register</span><br>
+        Input: <br>
+        {<br>
+            &nbsp;&nbsp;"name": "John Doe",<br>
+            &nbsp;&nbsp;"email": "john@test.com"<br>
+            &nbsp;&nbsp;"password": "password",<br>
+            &nbsp;&nbsp;"role": "student"<br>
+        }<br>
+        Output: <br>
+        {<br>
+            &nbsp;&nbsp;"value": "Success"<br>
+        }<br>
+        If error, it would return 404 or 500.<br><br>
+    </div>
+    <div>
+        # POST https://project-dojo.herokuapp.com/api/v1/login<br>
+        Input: <br>
+        {<br>
+            &nbsp;&nbsp;"email": "john@test.com"<br>
+            &nbsp;&nbsp;"password": "password",<br>
+            &nbsp;&nbsp;"role": "student"<br>
+        } <br>
+        Output: <br>
+        {<br>
+            &nbsp;&nbsp;"value": "Success"<br>
+        }<br>
+        If error<br>
+        {<br>
+            &nbsp;&nbsp;"value": "Fail"<br>
+        }<br>
+    </div>
+</body>
+</html>
