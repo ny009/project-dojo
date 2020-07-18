@@ -38,9 +38,9 @@ def hello_world():
 
 @app.route("/api/v1/register", methods=['POST'])
 def register():
-    name = request.args.get('name')
-    email = request.args.get('email')
-    password = request.args.get('password')
+    name = request.form.get('name')
+    email = request.form.get('email')
+    password = request.form.get('password')
     print(name)
     print(password)
     role = request.args.get('role')
