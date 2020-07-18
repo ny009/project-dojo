@@ -41,6 +41,7 @@ def register():
     name = request.args.get('name')
     email = request.args.get('email')
     password = request.args.get('password')
+    print(password)
     role = request.args.get('role')
     hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
     if role == 'student':
