@@ -57,12 +57,12 @@ def login():
     email = request.form.get('email')
     password = request.form.get('password')
     role = request.form.get('role')
-    if role == 'student':
-        sql = f"SELECT password FROM student WHERE email = {email}"
-    else:
-        sql = f"SELECT password FROM mentor WHERE email = {email}"
 
-    user = db.session.query(sql)
+    if role == 'student':
+        user = Student.query.filter_by(email=email).first()
+    else:
+        user = Mentor.query.filter_by(email=email).first()
+
     if user is not None and check_password_hash(user.password, password):
         return jsonify({'signed_in': True})
     return jsonify({'signed_in': False})
