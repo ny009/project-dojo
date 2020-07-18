@@ -15,6 +15,7 @@ bcrypt = "*"
 flask-bcrypt = "*"
 flask-mail = "*"
 gunicorn = "*"
+wtforms = "*"
 
 [requires]
 python_version = "3.8"
