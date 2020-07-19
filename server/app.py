@@ -3,8 +3,8 @@ from flask import request, jsonify, render_template
 from flask_bcrypt import Bcrypt, check_password_hash
 from flask_login import current_user, logout_user, UserMixin
 from flask_sqlalchemy import SQLAlchemy
+from flask_cors import CORS
 import os
-
 
 db = SQLAlchemy()
 
@@ -31,6 +31,7 @@ db.init_app(app)
 
 bcrypt = Bcrypt(app)
 
+cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 @app.route('/')
 def hello_world():
@@ -71,7 +72,6 @@ def login():
 
 @app.route("/api/v1/logout")
 def logout():
-    logout_user()
     return jsonify({'value': "Success"})
 
 
