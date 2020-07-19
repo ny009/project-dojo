@@ -56,6 +56,7 @@ def register():
 
 @app.route("/api/v1/login", methods=['POST'])
 def login():
+    print(request.form)
     email = request.form.get('email')
     password = request.form.get('password')
     role = request.form.get('role')
