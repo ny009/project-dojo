@@ -5,6 +5,7 @@ from flask_login import current_user, logout_user, UserMixin
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 import os
+from json import getjson
 
 db = SQLAlchemy()
 
@@ -56,11 +57,10 @@ def register():
 
 @app.route("/api/v1/login", methods=['POST'])
 def login():
+    print(request.get_json(force=True))
     email = request.form.get('email')
     password = request.form.get('password')
     role = request.form.get('role')
-    print(email)
-    print(password)
 
     if role == 'student':
         user = Student.query.filter_by(email=email).first()
