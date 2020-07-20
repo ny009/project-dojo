@@ -30,7 +30,7 @@ class Project(db.Model):
     outline = db.Column(db.String, nullable=False)
     mentor_id = db.Column(db.Integer, db.ForeignKey('mentor.mentor_id'))
 
-class Group(db.Model):
+class Groups(db.Model):
     group_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String, nullable=False)
     expiry_date = db.Column(db.DateTime, nullable=False)
@@ -121,7 +121,7 @@ def make_group():
     expiry_date = req['expiry_date']
     mentor = req['mentor']
 
-    project = Group(name=name, expiry_date=expiry_date, mentor_id=mentor)
+    project = Groups(name=name, expiry_date=expiry_date, mentor_id=mentor)
     db.session.add(project)
     db.session.commit()
 
