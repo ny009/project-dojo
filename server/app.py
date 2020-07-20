@@ -121,8 +121,8 @@ def make_group():
     expiry_date = req['expiry_date']
     mentor = req['mentor']
 
-    project = Groups(name=name, expiry_date=expiry_date, mentor_id=mentor)
-    db.session.add(project)
+    group = Groups(name=name, expiry_date=expiry_date, mentor_id=mentor)
+    db.session.add(group)
     db.session.commit()
 
     return jsonify({'value': "Success"})
