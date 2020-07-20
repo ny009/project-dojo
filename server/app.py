@@ -40,10 +40,11 @@ def hello_world():
 
 @app.route("/api/v1/register", methods=['POST'])
 def register():
-    name = request.form.get('name')
-    email = request.form.get('email')
-    password = request.form.get('password')
-    role = request.form.get('role')
+    req = request.get_json(force=True)
+    name = req['name']
+    email = req['email']
+    password = req['password']
+    role = req['role']
     hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
     if role == 'student':
         user = Student(name=name, email=email, password=hashed_password)
@@ -56,10 +57,10 @@ def register():
 
 @app.route("/api/v1/login", methods=['POST'])
 def login():
-    print(request.get_json(force=True))
-    email = request.form.get('email')
-    password = request.form.get('password')
-    role = request.form.get('role')
+    req = request.get_json(force=True)
+    email = req['email']
+    password = req['password']
+    role = req['role']
 
     if role == 'student':
         user = Student.query.filter_by(email=email).first()
