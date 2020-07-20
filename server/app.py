@@ -5,7 +5,6 @@ from flask_login import current_user, logout_user, UserMixin
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 import os
-from json import getjson
 
 db = SQLAlchemy()
 
