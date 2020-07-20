@@ -12,7 +12,7 @@
         Input: <br>
         {<br>
             &nbsp;&nbsp;"name": "John Doe",<br>
-            &nbsp;&nbsp;"email": "john@test.com"<br>
+            &nbsp;&nbsp;"email": "jd@test.com"<br>
             &nbsp;&nbsp;"password": "password",<br>
             &nbsp;&nbsp;"role": "student"<br>
         }<br>
@@ -26,7 +26,7 @@
         # POST https://project-dojo.herokuapp.com/api/v1/login<br>
         Input: <br>
         {<br>
-            &nbsp;&nbsp;"email": "john@test.com"<br>
+            &nbsp;&nbsp;"email": "jd@test.com"<br>
             &nbsp;&nbsp;"password": "password",<br>
             &nbsp;&nbsp;"role": "student"<br>
         } <br>
@@ -37,7 +37,58 @@
         If error<br>
         {<br>
             &nbsp;&nbsp;"value": "Fail"<br>
+        }<br><br>
+    </div>
+    <div>
+        # POST https://project-dojo.herokuapp.com/api/v1/project<br>
+        Input: <br>
+        {<br>
+            &nbsp;&nbsp;"title": "Project Title"<br>
+            &nbsp;&nbsp;"outline": "Outline of project",<br>
+            &nbsp;&nbsp;"mentor": "1"<br>
+        } <br>
+        Output: <br>
+        {<br>
+            &nbsp;&nbsp;"value": "Success"<br>
         }<br>
+
+        If error<br>
+        {<br>
+            If error, it would return 500.
+        }<br><br>
+    </div>
+    <div>
+        # GET https://project-dojo.herokuapp.com/api/v1/project?mentor=1<br>
+        Output: <br>
+        [<br>
+            &nbsp;&nbsp;{<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;"title": "Project Name",
+            &nbsp;&nbsp;&nbsp;&nbsp;"outline": "Project Outline",
+            &nbsp;&nbsp;&nbsp;&nbsp;"mentor": "1", // will be replaced by mentor name in future
+            &nbsp;&nbsp;}<br
+        ]<br>
+        If error<br>
+        {<br>
+            If error, it would return 500.
+        }<br><br>
+    </div>
+    <div>
+        # POST https://project-dojo.herokuapp.com/api/v1/group<br>
+        Input: <br>
+        {<br>
+            &nbsp;&nbsp;"name": "COMP9323"<br>
+            &nbsp;&nbsp;"expiry_date": "2020-10-8 23:59:00",<br>
+            &nbsp;&nbsp;"mentor": "1"<br>
+        } <br>
+        Output: <br>
+        {<br>
+            &nbsp;&nbsp;"value": "Success"<br>
+        }<br>
+
+        If error<br>
+        {<br>
+            If error, it would return 500.
+        }<br><br>
     </div>
 </body>
 </html>

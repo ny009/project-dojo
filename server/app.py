@@ -10,17 +10,31 @@ db = SQLAlchemy()
 
 
 class Mentor(db.Model, UserMixin):
-    mentor_id = db.Column(db.Integer, primary_key=True)
+    mentor_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(120), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(60), nullable=False)
+    projects = db.relationship("Project")
 
 
 class Student(db.Model, UserMixin):
-    student_id = db.Column(db.Integer, primary_key=True)
+    student_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(120), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(60), nullable=False)
+
+
+class Project(db.Model):
+    project_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    title = db.Column(db.String, nullable=False)
+    outline = db.Column(db.String, nullable=False)
+    mentor_id = db.Column(db.Integer, db.ForeignKey('mentor.mentor_id'))
+
+class Group(db.Model):
+    group_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String, nullable=False)
+    expiry_date = db.Column(db.DateTime, nullable=False)
+    mentor_id = db.Column(db.Integer, db.ForeignKey('mentor.mentor_id'))
 
 
 app = Flask(__name__)
@@ -74,6 +88,43 @@ def login():
 
 @app.route("/api/v1/logout")
 def logout():
+    return jsonify({'value': "Success"})
+
+
+@app.route("/api/v1/project", methods=['POST'])
+def create_project():
+    req = request.get_json(force=True)
+    title = req['title']
+    outline = req['outline']
+    mentor = req['mentor']
+
+    project = Project(title=title, outline=outline, mentor_id=mentor)
+    db.session.add(project)
+    db.session.commit()
+
+    return jsonify({'value': "Success"})
+
+
+@app.route("/api/v1/project", methods=['GET'])
+def get_project_by_mentor():
+    mentor_id = request.args.get('mentor', type=int)
+
+    projects = Project.query.filter_by(mentor_id=mentor_id).all()
+
+    return jsonify(projects)
+
+
+@app.route("/api/v1/group", methods=['POST'])
+def make_group():
+    req = request.get_json(force=True)
+    name = req['name']
+    expiry_date = req['expiry_date']
+    mentor = req['mentor']
+
+    project = Group(name=name, expiry_date=expiry_date, mentor_id=mentor)
+    db.session.add(project)
+    db.session.commit()
+
     return jsonify({'value': "Success"})
 
 
