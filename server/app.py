@@ -28,12 +28,8 @@ class Project(db.Model):
     project_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     title = db.Column(db.String, nullable=False)
     outline = db.Column(db.String, nullable=False)
-    mentor_id = db.Column(db.Integer, db.ForeignKey('mentor.mentor_id'))
-
-class Groups(db.Model):
-    group_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name = db.Column(db.String, nullable=False)
-    expiry_date = db.Column(db.DateTime, nullable=False)
+    start_date = db.Column(db.Date, nullable=False)
+    end_date = db.Column(db.Date, nullable=False)
     mentor_id = db.Column(db.Integer, db.ForeignKey('mentor.mentor_id'))
 
 
@@ -47,12 +43,15 @@ bcrypt = Bcrypt(app)
 
 cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 
+version = "v2"
+
+
 @app.route('/')
-def hello_world():
+def list_api():
     return render_template('index.html')
 
 
-@app.route("/api/v1/register", methods=['POST'])
+@app.route(f"/api/{version}/register", methods=['POST'])
 def register():
     req = request.get_json(force=True)
     name = req['name']
@@ -69,7 +68,7 @@ def register():
     return jsonify({'value': "Success"})
 
 
-@app.route("/api/v1/login", methods=['POST'])
+@app.route(f"/api/{version}/login", methods=['POST'])
 def login():
     req = request.get_json(force=True)
     email = req['email']
@@ -82,50 +81,45 @@ def login():
         user = Mentor.query.filter_by(email=email).first()
 
     if user is not None and check_password_hash(user.password, password):
-        return jsonify({'value': "Success"})
+        if role == 'student':
+            return jsonify({"id": user.student_id, "name": user.name})
+        else:
+            return jsonify({"id": user.mentor_id, "name": user.name})
+
     return jsonify({'value': "Fail"})
 
 
-@app.route("/api/v1/logout")
+@app.route(f"/api/{version}/logout")
 def logout():
     return jsonify({'value': "Success"})
 
 
-@app.route("/api/v1/project", methods=['POST'])
+@app.route(f"/api/{version}/project", methods=['POST'])
 def create_project():
     req = request.get_json(force=True)
     title = req['title']
     outline = req['outline']
+    start_date = req['start_date']
+    end_date = req['end_date']
     mentor = req['mentor']
 
-    project = Project(title=title, outline=outline, mentor_id=mentor)
+    project = Project(title=title, outline=outline,
+                      start_date=start_date, end_date=end_date, mentor_id=mentor)
     db.session.add(project)
     db.session.commit()
 
     return jsonify({'value': "Success"})
 
 
-@app.route("/api/v1/project", methods=['GET'])
+@app.route(f"/api/{version}/project", methods=['GET'])
 def get_project_by_mentor():
     mentor_id = request.args.get('mentor', type=int)
-
-    projects = Project.query.filter_by(mentor_id=mentor_id).all()
+    if mentor_id is not None:
+        projects = Project.query.filter_by(mentor_id=mentor_id).all()
+    else:
+        projects = Project.query.all()
 
     return jsonify(projects)
-
-
-@app.route("/api/v1/group", methods=['POST'])
-def make_group():
-    req = request.get_json(force=True)
-    name = req['name']
-    expiry_date = req['expiry_date']
-    mentor = req['mentor']
-
-    group = Groups(name=name, expiry_date=expiry_date, mentor_id=mentor)
-    db.session.add(group)
-    db.session.commit()
-
-    return jsonify({'value': "Success"})
 
 
 if __name__ == "__main__":

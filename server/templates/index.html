@@ -40,11 +40,14 @@
         }<br><br>
     </div>
     <div>
+        Create a project<br>
         # POST https://project-dojo.herokuapp.com/api/v1/project<br>
         Input: <br>
         {<br>
             &nbsp;&nbsp;"title": "Project Title"<br>
             &nbsp;&nbsp;"outline": "Outline of project",<br>
+            &nbsp;&nbsp;"start_date": "2020-06-01",<br>
+            &nbsp;&nbsp;"end_date": "2020-07-14",<br>
             &nbsp;&nbsp;"mentor": "1"<br>
         } <br>
         Output: <br>
@@ -58,36 +61,39 @@
         }<br><br>
     </div>
     <div>
+        Projects by mentor<br>
         # GET https://project-dojo.herokuapp.com/api/v1/project?mentor=1<br>
         Output: <br>
         [<br>
             &nbsp;&nbsp;{<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;"title": "Project Name",
-            &nbsp;&nbsp;&nbsp;&nbsp;"outline": "Project Outline",
-            &nbsp;&nbsp;&nbsp;&nbsp;"mentor": "1", // will be replaced by mentor name in future
+            &nbsp;&nbsp;&nbsp;&nbsp;"title": "Project Name",<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;"outline": "Project Outline",<br>
+            &nbsp;&nbsp;"start_date": "2020-06-01",<br>
+            &nbsp;&nbsp;"end_date": "2020-07-14",<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;"mentor": "1"<br>
             &nbsp;&nbsp;}<br
         ]<br>
         If error<br>
         {<br>
-            If error, it would return 500.
+            If error, it would return 500.<br>
         }<br><br>
     </div>
     <div>
-        # POST https://project-dojo.herokuapp.com/api/v1/group<br>
-        Input: <br>
-        {<br>
-            &nbsp;&nbsp;"name": "COMP9323"<br>
-            &nbsp;&nbsp;"expiry_date": "2020-10-8 23:59:00",<br>
-            &nbsp;&nbsp;"mentor": "1"<br>
-        } <br>
+        All projects<br>
+        # GET https://project-dojo.herokuapp.com/api/v1/project<br>
         Output: <br>
-        {<br>
-            &nbsp;&nbsp;"value": "Success"<br>
-        }<br>
-
+        [<br>
+            &nbsp;&nbsp;{<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;"title": "Project Name",<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;"outline": "Project Outline",<br>
+            &nbsp;&nbsp;"start_date": "2020-06-01",<br>
+            &nbsp;&nbsp;"end_date": "2020-07-14",<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;"mentor": "1"<br>
+            &nbsp;&nbsp;}<br
+        ]<br>
         If error<br>
         {<br>
-            If error, it would return 500.
+            If error, it would return 500.<br>
         }<br><br>
     </div>
 </body>
