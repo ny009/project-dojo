@@ -6,9 +6,9 @@
     <title>Project Dojo - API</title>
 </head>
 <body>
-    <h1>Project Dojo API - version 1</h1>
+    <h1>Project Dojo API - version 2</h1>
     <div>
-        <span># POST https://project-dojo.herokuapp.com/api/v1/register</span><br>
+        <span># POST https://project-dojo.herokuapp.com/api/v2/register</span><br>
         Input: <br>
         {<br>
             &nbsp;&nbsp;"name": "John Doe",<br>
@@ -23,7 +23,7 @@
         If error, it would return 404 or 500.<br><br>
     </div>
     <div>
-        # POST https://project-dojo.herokuapp.com/api/v1/login<br>
+        # POST https://project-dojo.herokuapp.com/api/v2/login<br>
         Input: <br>
         {<br>
             &nbsp;&nbsp;"email": "jd@test.com"<br>
@@ -41,7 +41,7 @@
     </div>
     <div>
         Create a project<br>
-        # POST https://project-dojo.herokuapp.com/api/v1/project<br>
+        # POST https://project-dojo.herokuapp.com/api/v2/project<br>
         Input: <br>
         {<br>
             &nbsp;&nbsp;"title": "Project Title"<br>
@@ -58,8 +58,9 @@
         If error, it would return 500.<br><br>
     </div>
     <div>
+        {% raw %}
         Projects by mentor<br>
-        # GET https://project-dojo.herokuapp.com/api/v1/project?mentor=1<br>
+        # GET https://project-dojo.herokuapp.com/api/v2/project?mentor=1<br>
         Output: <br>
         [<br>
             &nbsp;&nbsp;{<br>
@@ -71,10 +72,12 @@
             &nbsp;&nbsp;}<br
         &#93;<br>
         If error, it would return 500.<br><br>
+        {% endraw %}
     </div>
     <div>
+        {% raw %}
         All projects<br>
-        # GET https://project-dojo.herokuapp.com/api/v1/project<br>
+        # GET https://project-dojo.herokuapp.com/api/v2/project<br>
         Output: <br>
         [<br>
             &nbsp;&nbsp;{<br>
@@ -86,6 +89,7 @@
             &nbsp;&nbsp;}<br
         &#93;<br>
         If error, it would return 500.<br><br>
+        {% endraw %}
     </div>
 </body>
 </html>
