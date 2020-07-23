@@ -1,15 +1,15 @@
 from flask import Flask
 from flask import request, jsonify, render_template
 from flask_bcrypt import Bcrypt, check_password_hash
-from flask_login import current_user, logout_user, UserMixin
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 import os
+from sqlalchemy import text
 
 db = SQLAlchemy()
 
 
-class Mentor(db.Model, UserMixin):
+class Mentor(db.Model):
     mentor_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(120), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
@@ -17,7 +17,7 @@ class Mentor(db.Model, UserMixin):
     projects = db.relationship("Project")
 
 
-class Student(db.Model, UserMixin):
+class Student(db.Model):
     student_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(120), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
@@ -31,6 +31,11 @@ class Project(db.Model):
     start_date = db.Column(db.Date, nullable=False)
     end_date = db.Column(db.Date, nullable=False)
     mentor_id = db.Column(db.Integer, db.ForeignKey('mentor.mentor_id'))
+
+
+class Team(db.Model):
+    team_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String, nullable=False)
 
 
 app = Flask(__name__)
@@ -122,5 +127,42 @@ def get_project_by_mentor():
     return jsonify(projects)
 
 
+@app.route(f"/api/{version}/project/enroll", methods=['POST'])
+def enroll_project():
+    req = request.get_json(force=True)
+    project_id = req['project_id']
+    student_id = req['student_id']
+
+    sql = f"INSERT INTO student_project(project_id, student_id) VALUES({project_id}, {student_id});"
+    db.session.execute(text(sql))
+    db.session.commit()
+
+    return jsonify({'value': "Success"})
+
+
+@app.route(f"/api/{version}/team", methods=['POST'])
+def create_team():
+    req = request.get_json(force=True)
+    student_id = req['student_id']
+    project_id = req['project_id']
+    name = req['name']
+
+    team = Team(name=name)
+    db.session.add(team)
+    db.session.flush()
+
+    team_id = team.team_id
+
+    sql = f"INSERT INTO student_team(team_id, student_id) VALUES({team_id}, {student_id});"
+    db.session.execute(text(sql))
+    db.session.commit()
+
+    sql = f"INSERT INTO project_team(team_id, project_id) VALUES({team_id}, {project_id});"
+    db.session.execute(text(sql))
+    db.session.commit()
+
+    return jsonify({'value': "Success"})
+
+
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug3=True)
