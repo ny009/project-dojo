@@ -123,8 +123,13 @@ def get_project_by_mentor():
         projects = Project.query.filter_by(mentor_id=mentor_id).all()
     else:
         projects = Project.query.all()
+    
+    p = []
 
-    return jsonify(projects)
+    for project in projects:
+        pp = {'project_id': project.project_id, 'title': project.title, 'outline': project.outline, 'mentor_id': project.mentor_id, 'start_date': project.start_date, 'end_date': project.end_date}
+        p.append(pp)
+    return jsonify(p)
 
 
 @app.route(f"/api/{version}/project/enroll", methods=['POST'])
@@ -164,5 +169,17 @@ def create_team():
     return jsonify({'value': "Success"})
 
 
+@app.route(f"/api/{version}/team", methods=['GET'])
+def get_teams_for_project():
+    project_id = request.args.get('project', type=int)
+
+    sql = f"SELECT student_id, name, email FROM student WHERE student_id in(SELECT student_id FROM student_team WHERE team_id IN(SELECT team_id FROM project_team WHERE project_id = {project_id}));"
+
+    result = db.session.execute(text(sql))
+    db.session.commit()
+
+    return jsonify(result)
+
+
 if __name__ == "__main__":
-    app.run(debug3=True)
+    app.run(debug=True)
