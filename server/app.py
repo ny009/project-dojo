@@ -123,11 +123,11 @@ def get_project_by_mentor():
         projects = Project.query.filter_by(mentor_id=mentor_id).all()
     else:
         projects = Project.query.all()
-    
     p = []
 
     for project in projects:
-        pp = {'project_id': project.project_id, 'title': project.title, 'outline': project.outline, 'mentor_id': project.mentor_id, 'start_date': project.start_date, 'end_date': project.end_date}
+        pp = {'project_id': project.project_id, 'title': project.title, 'outline': project.outline,
+              'mentor_id': project.mentor_id, 'start_date': project.start_date, 'end_date': project.end_date}
         p.append(pp)
     return jsonify(p)
 
@@ -173,12 +173,38 @@ def create_team():
 def get_teams_for_project():
     project_id = request.args.get('project', type=int)
 
-    sql = f"SELECT student_id, name, email FROM student WHERE student_id in(SELECT student_id FROM student_team WHERE team_id IN(SELECT team_id FROM project_team WHERE project_id = {project_id}));"
+    sql = f"select t.team_id, t.name, t.description, s.name, s.email, sn.student_count"\
+        f"from student s, student_team st, team t, project_team pt, project p, student_numbers_per_team sn"\
+        f"where s.student_id = st.student_id and st.team_id = t.team_id and t.team_id = pt.team_id and sn.team_id = t.team_id and pt.project_id = p.project_id and p.project_id = {project_id};"
 
     result = db.session.execute(text(sql))
     db.session.commit()
 
-    return jsonify(result)
+    teams = []
+
+    for r in result:
+        tt = {'student_id': r.student_id, 'name': r.name, 'email': r.email}
+        teams.append(tt)
+
+    return jsonify(teams)
+
+
+@app.route(f"/api/{version}/meeting", methods=['GET'])
+def get_meeting():
+    team_id = request.args.get('team', type=int)
+
+    sql = f"select m.meeting_id, m.start_time, m.end_time, m.date, p.title"\
+          f"from meeting m, project_team pt, project p where m.team_id = pt.team_id and pt.project_id = p.project_id AND m.team_id = {team_id};"
+    result = db.session.execute(text(sql))
+    db.session.commit()
+
+    teams = []
+
+    for r in result:
+        tt = {'student_id': r.student_id, 'name': r.name, 'email': r.email}
+        teams.append(tt)
+
+    return jsonify(teams)
 
 
 if __name__ == "__main__":
